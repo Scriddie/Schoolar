@@ -39,7 +39,7 @@ def plot_citations(*authors):
 
 
 if __name__ == '__main__':
-    use_proxy
+    use_proxy()
     christof = get_author('Christof Seiler')
     sebastian = get_author('Sebastian Weichwald')
     plot_citations(christof, sebastian)
