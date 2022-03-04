@@ -8,9 +8,12 @@ import json
 import plotly
 import plotly.express as px
 import pandas as pd
+import tempfile
 
-
-AUTHOR_DIR = '/var/www/FlaskApps/SchoolarFlask/temp/authors.csv'
+# AUTHOR_DIR = '/var/www/FlaskApps/SchoolarFlask/temp/authors.csv'
+TEMPFILE = tempfile.NamedTemporaryFile()
+temp_df = pd.DataFrame({'Year': [], 'Citations': [], 'Researcher': []})
+temp_df.to_csv(TEMPFILE.name)
 
 
 def use_proxy():
@@ -34,10 +37,7 @@ def get_author(name):
 
 def load_authors():
     """ load authors from temp directory """
-    if os.path.exists(AUTHOR_DIR):
-        return pd.read_csv(AUTHOR_DIR)
-    else:
-        return pd.DataFrame({'Year': [], 'Citations': [], 'Researcher': []})
+    return pd.read_csv(TEMPFILE.name)
 
 
 def add_author(author):
@@ -49,7 +49,7 @@ def add_author(author):
     researcher += len(list(author['cites_per_year'].values()))*[author['name']]
     new_author = pd.DataFrame({'Year': years, 'Citations': cites, 'Researcher': researcher})    
     authors = pd.concat((df, new_author), axis=0)
-    authors.to_csv(AUTHOR_DIR, index=False)
+    authors.to_csv(TEMPFILE.name, index=False)
 
 
 def plot_citations(df):

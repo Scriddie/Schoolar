@@ -1,9 +1,15 @@
 from flask import Flask, request, render_template
+from flask_session import Session
 import sys
 sys.path.append('/var/www/FlaskApps')
 from SchoolarFlask.query import *
 
+
+# generate app and start session
 app = Flask(__name__)
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+Session(app)
 
 
 @app.route("/")
@@ -11,8 +17,6 @@ def run():
     df = load_authors()
     graphJSON = plot_citations(df)
     return render_template('simple.html', graphJSON=graphJSON)
-    # return christof['name']
-    # return "Hello world! and stars"
 
 
 @app.route('/', methods=['POST'])
