@@ -1,8 +1,10 @@
 import sys
-sys.path.append('/var/www/FlaskApps/SchoolarFlask/Schoolar/src/')
+sys.path.append('/var/www/FlaskApps/SchoolarFlask/')
 from scholarly.scholarly import scholarly
 import matplotlib.pyplot as plt
 import seaborn as sns
+import json
+import plotly
 import plotly.express as px
 import pandas as pd
 
@@ -32,9 +34,10 @@ def plot_citations(*authors):
         cites += list(a['cites_per_year'].values())
         researcher += len(list(a['cites_per_year'].values())) * [a['name']]
 
-    df = pd.DataFrame({'year': years, 'cites': cites, 'researcher': researcher})
-    fig = px.line(data_frame=df, x='year', y='cites', color='researcher')
-    fig.show()
+    df = pd.DataFrame({'Year': years, 'Citations': cites, 'Researcher': researcher})
+    fig = px.line(data_frame=df, x='Year', y='Citations', color='Researcher')
+    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    return graphJSON
     # plt.legend(bbox_to_anchor=(1.02, 1), loc='upper left', borderaxespad=0)
     # plt.tight_layout()
     # plt.show()
