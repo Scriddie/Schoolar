@@ -1,7 +1,7 @@
 import os
 import sys
 sys.path.append('/var/www/FlaskApps/SchoolarFlask/')
-from scholarly.scholarly import scholarly
+from scholarly.scholarly import scholarly, ProxyGenerator
 import matplotlib.pyplot as plt
 import seaborn as sns
 import json
@@ -24,7 +24,6 @@ def use_proxy():
     Set up a ProxyGenerator object to use free proxies
     This needs to be done only once per session
     """
-    from scholarly import ProxyGenerator
     pg = ProxyGenerator()
     pg.FreeProxies()
     scholarly.use_proxy(pg)
@@ -33,9 +32,12 @@ def use_proxy():
 def get_author(name):
     """ get author from scholarly """
     search_query = scholarly.search_author(name)
-    first_profile = next(search_query)
-    author = scholarly.fill(first_profile)
-    return author
+    try:
+        first_profile = next(search_query)
+        author = scholarly.fill(first_profile)
+        return author
+    except StopIteration:
+        None
 
 
 def load_authors(user_id):
@@ -63,7 +65,6 @@ def plot_citations(df):
 
 
 if __name__ == '__main__':
-    use_proxy()
-    christof = get_author('Christof Seiler')
-    sebastian = get_author('Sebastian Weichwald')
-    plot_citations(christof, sebastian)
+    # use_proxy()
+    christof = get_author('asrgera lol')
+    plot_citations(christof)

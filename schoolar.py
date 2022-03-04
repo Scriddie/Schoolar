@@ -33,7 +33,11 @@ def my_post():
     elif 'add_researcher' in request.form:
         text = request.form['add_researcher']
         author = get_author(text)
-        add_author(author, user_id)
+        if author is None:
+            # TODO author does not exist
+            pass
+        else:
+            add_author(author, user_id)
     else:
         pass
     df = load_authors(user_id)
