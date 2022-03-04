@@ -15,12 +15,12 @@ app = Flask(__name__)
 
 @app.route("/")
 def run():
-    df = load_authors()
+    user_id = str(np.random.randint(0, 999999))
+    create_user_storage(user_id)
+    df = load_authors(user_id)
     graphJSON = plot_citations(df)
     resp = make_response(render_template('simple.html', graphJSON=graphJSON))
-    user_id = str(np.random.randint(0, 999999))
     resp.set_cookie('userID', user_id)
-    create_user_storage(user_id)
     return resp
 
 
