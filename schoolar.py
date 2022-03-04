@@ -3,7 +3,6 @@ from flask_session import Session
 import numpy as np
 import sys
 
-from query import create_user_storage
 sys.path.append('/var/www/FlaskApps')
 from SchoolarFlask.query import *
 
