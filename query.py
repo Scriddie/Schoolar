@@ -28,29 +28,25 @@ def get_author(name):
 
 
 def add_author(df, author):
+    """ Add new author to dataframe """
     if df is None:
-         df = pd.DataFrame({'Citations': [], 'Year': [], 'Researcher': []})
-<form method="POST">
-    <input name="text">
-    <input type="submit">
-</form>
-
-
-def plot_citations(authors):
-    """ authors: list of authors """
+         df = pd.DataFrame({'Year': [], 'Citations': [], 'Researcher': []})
+    
     years, cites, researcher = [], [], []
-    for a in authors:
-        years += list(a['cites_per_year'].keys())
-        cites += list(a['cites_per_year'].values())
-        researcher += len(list(a['cites_per_year'].values())) * [a['name']]
+    years += list(author['cites_per_year'].keys())
+    cites += list(author['cites_per_year'].values())
+    researcher += len(list(author['cites_per_year'].values()))*[author['name']]
+    new_author = pd.DataFrame({'Year': years, 'Citations': cites, 'Researcher': researcher})
+    
+    authors = pd.concat((df, new_author), axis=0)
+    authors.to_csv('temp/authors.csv', index=False)
 
-    df = pd.DataFrame({'Year': years, 'Citations': cites, 'Researcher': researcher})
+
+def plot_citations(df):
+    """ df: contains Year, Citations, Researcher """
     fig = px.line(data_frame=df, x='Year', y='Citations', color='Researcher')
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
-    # plt.legend(bbox_to_anchor=(1.02, 1), loc='upper left', borderaxespad=0)
-    # plt.tight_layout()
-    # plt.show()
 
 
 if __name__ == '__main__':
