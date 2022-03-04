@@ -18,7 +18,7 @@ def run():
     df = load_authors()
     graphJSON = plot_citations(df)
     resp = make_response(render_template('simple.html', graphJSON=graphJSON))
-    resp.set_cookie('userID', np.random.randint(0, 999999))
+    resp.set_cookie('userID', str(np.random.randint(0, 999999)))
     return resp
 
 
