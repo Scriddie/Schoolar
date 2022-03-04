@@ -1,5 +1,6 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, make_response
 from flask_session import Session
+import numpy as np
 import sys
 sys.path.append('/var/www/FlaskApps')
 from SchoolarFlask.query import *
@@ -16,7 +17,9 @@ app = Flask(__name__)
 def run():
     df = load_authors()
     graphJSON = plot_citations(df)
-    return render_template('simple.html', graphJSON=graphJSON)
+    resp = make_response(render_template('simple.html', graphJSON=graphJSON))
+    resp.set_cookie('userID', np.random.randint(0, 999999))
+    return resp
 
 
 @app.route('/', methods=['POST'])
