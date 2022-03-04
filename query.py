@@ -26,8 +26,18 @@ def get_author(name):
     author = scholarly.fill(first_profile)
     return author
 
-# create a simple graph
-def plot_citations(*authors):
+
+def add_author(df, author):
+    if df is None:
+         df = pd.DataFrame({'Citations': [], 'Year': [], 'Researcher': []})
+<form method="POST">
+    <input name="text">
+    <input type="submit">
+</form>
+
+
+def plot_citations(authors):
+    """ authors: list of authors """
     years, cites, researcher = [], [], []
     for a in authors:
         years += list(a['cites_per_year'].keys())

@@ -8,9 +8,11 @@ app = Flask(__name__)
 
 @app.route("/")
 def run():
-    christof = get_author('Christof Seiler')
-    sebastian = get_author('Sebastian Weichwald')
-    graphJSON = plot_citations(christof, sebastian)
+    a = get_author('Christof Seiler')
+    df = add_author(df=None, a)
+    b = get_author('Sebastian Weichwald')
+    df = add_author(df, b)
+    graphJSON = plot_citations(df)
     return render_template('simple.html', graphJSON=graphJSON)
     # return christof['name']
     # return "Hello world! and stars"
@@ -18,9 +20,11 @@ def run():
 
 @app.route('/', methods=['POST'])
 def my_post():
+    df = pd.read_csv('temp/authors.csv')
     text = request.form['add_researcher']
-    researcher = get_author(text)
-    graphJSON = plot_citations(researcher)
+    author = get_author(text)
+    df = add_author(df, author)
+    graphJSON = plot_citations(df)
     return render_template('simple.html', graphJSON=graphJSON)
 
 
