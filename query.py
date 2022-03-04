@@ -10,6 +10,9 @@ import plotly.express as px
 import pandas as pd
 
 
+AUTHOR_DIR = '/var/www/FlaskApps/SchoolarFlask/temp/authors.csv'
+
+
 def use_proxy():
     """ 
     Set up a ProxyGenerator object to use free proxies
@@ -31,8 +34,8 @@ def get_author(name):
 
 def load_authors():
     """ load authors from temp directory """
-    if os.path.exists('temp/authors.csv'):
-        return pd.read_csv('temp/authors.csv')
+    if os.path.exists(AUTHOR_DIR):
+        return pd.read_csv(AUTHOR_DIR)
     else:
         return pd.DataFrame({'Year': [], 'Citations': [], 'Researcher': []})
 
@@ -46,7 +49,7 @@ def add_author(author):
     researcher += len(list(author['cites_per_year'].values()))*[author['name']]
     new_author = pd.DataFrame({'Year': years, 'Citations': cites, 'Researcher': researcher})    
     authors = pd.concat((df, new_author), axis=0)
-    authors.to_csv('temp/authors.csv', index=False)
+    authors.to_csv(AUTHOR_DIR, index=False)
 
 
 def plot_citations(df):
