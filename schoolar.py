@@ -8,8 +8,6 @@ app = Flask(__name__)
 
 @app.route("/")
 def run():
-    add_author(get_author('Christof Seiler'))
-    add_author(get_author('Sebastian Weichwald'))
     df = load_authors()
     graphJSON = plot_citations(df)
     return render_template('simple.html', graphJSON=graphJSON)
