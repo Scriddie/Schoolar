@@ -15,7 +15,6 @@ def temp_dir(user_id):
 
 
 def create_user_storage(user_id):
-    # TEMPFILE = tempfile.NamedTemporaryFile()
     df = pd.DataFrame({'Year': [], 'Citations': [], 'Researcher': []})
     df.to_csv(temp_dir(user_id))
 
