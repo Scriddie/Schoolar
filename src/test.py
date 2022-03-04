@@ -1,3 +1,5 @@
+import sys
+sys.path.append('/var/www/FlaskApps/SchoolarFlask/Schoolar/src/')
 from scholarly.scholarly import scholarly
 import matplotlib.pyplot as plt
 import seaborn as sns
