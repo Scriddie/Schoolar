@@ -30,6 +30,8 @@ def my_post():
     user_id = request.cookies.get('userID')
     if 'reset_button' in request.form:
         create_user_storage(user_id)
+    elif 'first_author' in request.form:
+        pass
     elif 'add_researcher' in request.form:
         text = request.form['add_researcher']
         author = get_author(text)
