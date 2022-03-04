@@ -2,7 +2,6 @@ from flask import Flask, request, render_template, make_response
 from flask_session import Session
 import numpy as np
 import sys
-
 sys.path.append('/var/www/FlaskApps')
 from SchoolarFlask.query import *
 
@@ -31,6 +30,7 @@ def my_post():
     if 'reset_button' in request.form:
         create_user_storage(user_id)
     elif 'first_author' in request.form:
+        # TODO
         pass
     elif 'add_researcher' in request.form:
         text = request.form['add_researcher']

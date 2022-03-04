@@ -66,5 +66,5 @@ def plot_citations(df):
 
 if __name__ == '__main__':
     # use_proxy()
-    christof = get_author('asrgera lol')
+    christof = get_author('Christof Seiler')
     plot_citations(christof)
