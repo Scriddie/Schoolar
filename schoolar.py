@@ -18,16 +18,19 @@ def run():
     df = load_authors()
     graphJSON = plot_citations(df)
     resp = make_response(render_template('simple.html', graphJSON=graphJSON))
-    resp.set_cookie('userID', str(np.random.randint(0, 999999)))
+    user_id = str(np.random.randint(0, 999999))
+    resp.set_cookie('userID', user_id)
+    create_user_storage(user_id)
     return resp
 
 
 @app.route('/', methods=['POST'])
 def my_post():
+    user_id = request.cookies.get('userID')
     text = request.form['add_researcher']
     author = get_author(text)
-    add_author(author)
-    df = load_authors()
+    add_author(author, user_id)
+    df = load_authors(user_id)
     graphJSON = plot_citations(df)
     return render_template('simple.html', graphJSON=graphJSON)
 
