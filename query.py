@@ -46,7 +46,7 @@ def load_authors(user_id):
 
 def add_author(author, user_id):
     """ Add new author to dataframe """
-    df = load_authors()
+    df = load_authors(user_id)
     years, cites, researcher = [], [], []
     years += list(author['cites_per_year'].keys())
     cites += list(author['cites_per_year'].values())
