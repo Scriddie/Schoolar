@@ -42,6 +42,14 @@ def add_author(df, author):
     authors.to_csv('temp/authors.csv', index=False)
 
 
+def load_authors():
+    """ load authors from temp directory """
+    if os.path.exists('temp/authors.csv'):
+        return pd.read_csv('temp/authors.csv')
+    else:
+        
+
+
 def plot_citations(df):
     """ df: contains Year, Citations, Researcher """
     fig = px.line(data_frame=df, x='Year', y='Citations', color='Researcher')

@@ -12,6 +12,7 @@ def run():
     df = add_author(df=None, a)
     b = get_author('Sebastian Weichwald')
     df = add_author(df, b)
+    df = get_authors()
     graphJSON = plot_citations(df)
     return render_template('simple.html', graphJSON=graphJSON)
     # return christof['name']
@@ -20,10 +21,10 @@ def run():
 
 @app.route('/', methods=['POST'])
 def my_post():
-    df = pd.read_csv('temp/authors.csv')
     text = request.form['add_researcher']
     author = get_author(text)
-    df = add_author(df, author)
+    add_author(author)
+    df = get_authors()
     graphJSON = plot_citations(df)
     return render_template('simple.html', graphJSON=graphJSON)
 
