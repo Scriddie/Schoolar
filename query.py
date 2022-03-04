@@ -1,3 +1,4 @@
+import os
 import sys
 sys.path.append('/var/www/FlaskApps/SchoolarFlask/')
 from scholarly.scholarly import scholarly
@@ -7,6 +8,7 @@ import json
 import plotly
 import plotly.express as px
 import pandas as pd
+
 
 def use_proxy():
     """ 
@@ -20,26 +22,11 @@ def use_proxy():
 
 
 def get_author(name):
-    # Get an iterator for the author results
+    """ get author from scholarly """
     search_query = scholarly.search_author(name)
     first_profile = next(search_query)
     author = scholarly.fill(first_profile)
     return author
-
-
-def add_author(df, author):
-    """ Add new author to dataframe """
-    if df is None:
-         df = pd.DataFrame({'Year': [], 'Citations': [], 'Researcher': []})
-    
-    years, cites, researcher = [], [], []
-    years += list(author['cites_per_year'].keys())
-    cites += list(author['cites_per_year'].values())
-    researcher += len(list(author['cites_per_year'].values()))*[author['name']]
-    new_author = pd.DataFrame({'Year': years, 'Citations': cites, 'Researcher': researcher})
-    
-    authors = pd.concat((df, new_author), axis=0)
-    authors.to_csv('temp/authors.csv', index=False)
 
 
 def load_authors():
@@ -47,7 +34,19 @@ def load_authors():
     if os.path.exists('temp/authors.csv'):
         return pd.read_csv('temp/authors.csv')
     else:
-        
+        return pd.DataFrame({'Year': [], 'Citations': [], 'Researcher': []})
+
+
+def add_author(author):
+    """ Add new author to dataframe """
+    df = load_authors()
+    years, cites, researcher = [], [], []
+    years += list(author['cites_per_year'].keys())
+    cites += list(author['cites_per_year'].values())
+    researcher += len(list(author['cites_per_year'].values()))*[author['name']]
+    new_author = pd.DataFrame({'Year': years, 'Citations': cites, 'Researcher': researcher})    
+    authors = pd.concat((df, new_author), axis=0)
+    authors.to_csv('temp/authors.csv', index=False)
 
 
 def plot_citations(df):

@@ -8,11 +8,9 @@ app = Flask(__name__)
 
 @app.route("/")
 def run():
-    a = get_author('Christof Seiler')
-    df = add_author(df=None, a)
-    b = get_author('Sebastian Weichwald')
-    df = add_author(df, b)
-    df = get_authors()
+    add_author(get_author('Christof Seiler'))
+    add_author(get_author('Sebastian Weichwald'))
+    df = load_authors()
     graphJSON = plot_citations(df)
     return render_template('simple.html', graphJSON=graphJSON)
     # return christof['name']
@@ -24,7 +22,7 @@ def my_post():
     text = request.form['add_researcher']
     author = get_author(text)
     add_author(author)
-    df = get_authors()
+    df = load_authors()
     graphJSON = plot_citations(df)
     return render_template('simple.html', graphJSON=graphJSON)
 
