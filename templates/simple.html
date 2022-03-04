@@ -1,16 +1,18 @@
 <!doctype html>
 <html>
 <body>
-  <center>
-    <h1>Compare Citations!</h1>
-    <form method="POST">
-        <input name="add_researcher">
-        <input type="submit" value="Add researcher">
-    </form>
-    <div>Loading can take like 10 sec, please be patient :)</div>
-    <input type="submit" name="reset_button" value="Reset">
-    <div id='chart' class='chart' style='width: 70%'></div>
-  </center>
+    <center>
+        <h1>Compare Citations!</h1>
+        <form method="POST">
+            <input name="add_researcher">
+            <input type="submit" value="Add researcher">
+        </form>
+        <div>Loading can take like 10 sec, please be patient :)</div>
+        <input type="submit" name="reset_button" value="Reset">
+        <form method="POST">
+            <div id='chart' class='chart' style='width: 70%'></div>
+        </form>
+    </center>
 </body>
 
 <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
