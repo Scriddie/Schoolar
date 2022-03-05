@@ -1,22 +1,38 @@
 import os
 import sys
+from threading import local
+
+from bibtexparser import load
 sys.path.append('/var/www/FlaskApps/SchoolarFlask/')
 from scholarly.scholarly import scholarly, ProxyGenerator
 import matplotlib.pyplot as plt
 import seaborn as sns
 import json
 import plotly
+from plotly.subplots import make_subplots
+import plotly.graph_objects as go
 import plotly.express as px
 import pandas as pd
+import pickle as pk
+# TODO create a NamedTuple author object
 
 
-def temp_dir(user_id):
-    return(f'/var/www/FlaskApps/SchoolarFlask/temp/{user_id}.csv')
+def temp_dir(user_id, local=False):
+    if local:
+        return f'temp/{user_id}.csv'
+    else:
+        return f'/var/www/FlaskApps/SchoolarFlask/temp/{user_id}.csv'
 
 
-def create_user_storage(user_id):
+def create_user_storage(user_id, local=False):
     df = pd.DataFrame({'Year': [], 'Citations': [], 'Researcher': []})
-    df.to_csv(temp_dir(user_id))
+    author_data = {'names': [],
+                   'other_cites': [],
+                   'first_author_cites': [],
+                   'df': df}
+    with open(temp_dir(user_id, local=local), 'wb') as fp:
+    	pk.dump(author_data, fp)
+    # df.to_csv(temp_dir(user_id, local=local))
 
 
 def use_proxy():
@@ -34,37 +50,103 @@ def get_author(name):
     search_query = scholarly.search_author(name)
     try:
         first_profile = next(search_query)
-        author = scholarly.fill(first_profile)
+        author = scholarly.fill(first_profile, sections=['basics', 'citations', 'counts', 'publications'])
         return author
     except StopIteration:
         None
 
 
-def load_authors(user_id):
+# def get_author_pubs(author):
+#     publications = []
+#     for i in author['publications']:
+#         title = i['bib']['title']
+#         publications.append(scholarly.search_single_pub(title, filled=True))
+    
+#     return publications
+
+
+def load_authors(user_id, local=False):
     """ load authors from temp directory """
-    return pd.read_csv(temp_dir(user_id))
+    with open(temp_dir(user_id, local=local), 'rb') as fp:
+        author_data = pk.load(fp)
+    return author_data
+    # return pd.read_csv(temp_dir(user_id, local=local))
 
 
-def add_author(author, user_id):
-    """ Add new author to dataframe """
-    df = load_authors(user_id)
+def add_author(author, user_id, local=False):
+    """ Save new author info """
+
+    # store cite per year info
+    author_data = load_authors(user_id, local=local)
+    df = author_data['df']
     years, cites, researcher = [], [], []
     years += list(author['cites_per_year'].keys())
     cites += list(author['cites_per_year'].values())
     researcher += len(list(author['cites_per_year'].values()))*[author['name']]
     new_author = pd.DataFrame({'Year': years, 'Citations': cites, 'Researcher': researcher})    
-    authors = pd.concat((df, new_author), axis=0)
-    authors.to_csv(temp_dir(user_id), index=False)
+    df = pd.concat((df, new_author), axis=0)
+    # df.to_csv(temp_dir(user_id, local=local), index=False)
+
+    # first author cites / other cites
+    first_author_cites = 0
+    for p in author['publications']:
+        if author['name'] == p['bib']['author'].split(' and')[0]:
+            first_author_cites += p['num_citations']
+    other_cites = author['citedby'] - first_author_cites
+
+    author_data = {
+        'names': author_data['names']+[author['name']],
+        'other_cites': author_data['other_cites']+[other_cites],
+        'first_author_cites': author_data['first_author_cites']+[first_author_cites],
+        'df': df
+    }
+
+    with open(temp_dir(user_id, local=local), 'wb') as fp:
+    	pk.dump(author_data, fp)
+    
 
 
-def plot_citations(df):
+def plot_citations(author_data, show=False):
     """ df: contains Year, Citations, Researcher """
-    fig = px.line(data_frame=df, x='Year', y='Citations', color='Researcher')
-    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-    return graphJSON
+    df = author_data['df']
+    # fig = make_subplots(rows=2, cols=1)
+    
+    # # cites per year
+    # fig.append_trace(
+    #     go.Scatter(x=df['Year'], y=df['Citations'], fill=df['Researcher']), 
+    #     # px.line(data_frame=df, x='Year', y='Citations', color='Researcher'), 
+    # row=1, col=1)
+    
+    # # total cites
+    # fig.append_trace(
+    #     go.Bar(x=author_data['names'], y=author_data['cites']), 
+    # row=2, col=1)
+    # fig.append_trace(go.Bar(
+    #     x=author_data['names'], y=author_data['first_author_cites']), 
+    # row=2, col=1)
+    
+    # fig = px.line(data_frame=df, x='Year', y='Citations', color='Researcher')
+    df_bar = pd.DataFrame({
+        'Name': author_data['names'],
+        'Other citations': author_data['other_cites'],
+        'First author citations': author_data['first_author_cites'],
+    })
+    df_bar_long = pd.melt(df_bar, 
+        id_vars=['Name'], value_name ='Number', var_name='Citation Type')
+    fig = px.bar(data_frame=df_bar_long, 
+        x='Name', y='Number', color='Citation Type')
+    if show:
+        fig.show()
+    else:
+        graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+        return graphJSON
 
 
 if __name__ == '__main__':
     # use_proxy()
-    christof = get_author('Christof Seiler')
-    plot_citations(christof)
+    user_id = 1
+    create_user_storage(user_id, local=True)
+    add_author(get_author('Sebastian Weichwald'), user_id, local=True)
+    add_author(get_author('Alexander Reisac'), user_id, local=True)
+    author_data = load_authors(user_id, local=True)
+    plot_citations(author_data, show=True)
