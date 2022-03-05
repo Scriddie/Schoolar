@@ -14,7 +14,7 @@ import plotly.graph_objects as go
 import plotly.express as px
 import pandas as pd
 import pickle as pk
-# TODO create a NamedTuple author object
+from collections import Counter
 
 
 def temp_dir(user_id, local=False):
@@ -64,6 +64,11 @@ def load_authors(user_id, local=False):
     # return pd.read_csv(temp_dir(user_id, local=local))
 
 
+def contains_all(string, substring):
+    c1, c2 = Counter(string), Counter(substring)
+    return all(c1[x] >= c2[x] for x in c2)
+
+
 def add_author(author, user_id, local=False):
     """ Save new author info """
 
@@ -81,7 +86,7 @@ def add_author(author, user_id, local=False):
     first_author_cites = 0
     for p in author['publications']:
         # TODO not sure if best criterion
-        if p['bib']['author'].split(' and')[0] in author['name']:
+        if contains_all(author['name'], p['bib']['author'].split(' and')[0]):
             first_author_cites += p['num_citations']
     other_cites = author['citedby'] - first_author_cites
 
@@ -118,15 +123,15 @@ def plot_citations(author_data, show=False):
     
     # fig = px.line(data_frame=df, x='Year', y='Citations', color='Researcher')
     df_bar = pd.DataFrame({
-        'Name': author_data['names'],
+        'Researcher': author_data['names'],
         'Other citations': author_data['other_cites'],
         'First author citations': author_data['first_author_cites'],
     })
     df_bar_long = pd.melt(df_bar, 
-        id_vars=['Name'], value_name ='Number', var_name='Citation Type')
+        id_vars=['Researcher'], value_name ='Number', var_name='Citation Type')
     df_bar_long.sort_values(by='Citation Type', inplace=True)
     fig = px.bar(data_frame=df_bar_long, 
-        x='Name', y='Number', color='Citation Type')
+        x='Researcher', y='Number', color='Citation Type')
     if show:
         fig.show()
     else:
