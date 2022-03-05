@@ -65,10 +65,10 @@ def load_authors(user_id, local=False):
 
 
 # TODO fix this for Similarity
-def contains_all(string, substring):
+def contains_enough(string, substring):
     c1, c2 = Counter(string), Counter(substring)
     comparison = [c1[x] >= c2[x] for x in c2]
-    return (sum(comparison) / len(substring)) > 0.8
+    return (sum(comparison) / len(c2)) > 0.8
 
 
 def add_author(author, user_id, local=False):
@@ -88,7 +88,7 @@ def add_author(author, user_id, local=False):
     first_author_cites = 0
     for p in author['publications']:
         # TODO not sure if best criterion
-        if contains_all(author['name'], p['bib']['author'].split(' and')[0]):
+        if contains_enough(author['name'], p['bib']['author'].split(' and')[0]):
             first_author_cites += p['num_citations']
     other_cites = author['citedby'] - first_author_cites
 
@@ -148,7 +148,7 @@ if __name__ == '__main__':
     # use_proxy()
     user_id = 1
     create_user_storage(user_id, local=True)
-    add_author(get_author('Sebastian Weichwald'), user_id, local=True)
+    # add_author(get_author('Sebastian Weichwald'), user_id, local=True)
     # add_author(get_author('Christof Seiler Maastricht'), user_id, local=True)
     author_data = load_authors(user_id, local=True)
     plot_citations(author_data, show=True)
