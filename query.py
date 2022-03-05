@@ -112,26 +112,26 @@ def plot_citations(author_data, show=False):
     #     go.Scatter(x=df['Year'], y=df['Citations'], fill=df['Researcher']), 
     #     # px.line(data_frame=df, x='Year', y='Citations', color='Researcher'), 
     # row=1, col=1)
-    
-    # # total cites
+        # # total cites
     # fig.append_trace(
     #     go.Bar(x=author_data['names'], y=author_data['cites']), 
     # row=2, col=1)
     # fig.append_trace(go.Bar(
     #     x=author_data['names'], y=author_data['first_author_cites']), 
     # row=2, col=1)
+    fig = px.line(data_frame=df, x='Year', y='Citations', color='Researcher')
     
-    # fig = px.line(data_frame=df, x='Year', y='Citations', color='Researcher')
-    df_bar = pd.DataFrame({
-        'Researcher': author_data['names'],
-        'Other citations': author_data['other_cites'],
-        'First-author citations': author_data['first_author_cites'],
-    })
-    df_bar_long = pd.melt(df_bar, 
-        id_vars=['Researcher'], value_name ='Citations', var_name='Citation Type')
-    df_bar_long.sort_values(by='Citation Type', inplace=True)
-    fig = px.bar(data_frame=df_bar_long, 
-        x='Researcher', y='Citations', color='Citation Type')
+    # df_bar = pd.DataFrame({
+    #     'Researcher': author_data['names'],
+    #     'Other citations': author_data['other_cites'],
+    #     'First-author citations': author_data['first_author_cites'],
+    # })
+    # df_bar_long = pd.melt(df_bar, 
+    #     id_vars=['Researcher'], value_name ='Citations', var_name='Citation Type')
+    # df_bar_long.sort_values(by='Citation Type', inplace=True)
+    # fig = px.bar(data_frame=df_bar_long, 
+    #     x='Researcher', y='Citations', color='Citation Type')
+
     if show:
         fig.show()
     else:
@@ -144,6 +144,6 @@ if __name__ == '__main__':
     user_id = 1
     create_user_storage(user_id, local=True)
     add_author(get_author('Sebastian Weichwald'), user_id, local=True)
-    add_author(get_author('Christof Seiler Maastricht'), user_id, local=True)
+    # add_author(get_author('Christof Seiler Maastricht'), user_id, local=True)
     author_data = load_authors(user_id, local=True)
     plot_citations(author_data, show=True)
