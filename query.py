@@ -56,15 +56,6 @@ def get_author(name):
         None
 
 
-# def get_author_pubs(author):
-#     publications = []
-#     for i in author['publications']:
-#         title = i['bib']['title']
-#         publications.append(scholarly.search_single_pub(title, filled=True))
-    
-#     return publications
-
-
 def load_authors(user_id, local=False):
     """ load authors from temp directory """
     with open(temp_dir(user_id, local=local), 'rb') as fp:
@@ -85,12 +76,12 @@ def add_author(author, user_id, local=False):
     researcher += len(list(author['cites_per_year'].values()))*[author['name']]
     new_author = pd.DataFrame({'Year': years, 'Citations': cites, 'Researcher': researcher})    
     df = pd.concat((df, new_author), axis=0)
-    # df.to_csv(temp_dir(user_id, local=local), index=False)
 
     # first author cites / other cites
     first_author_cites = 0
     for p in author['publications']:
-        if author['name'] == p['bib']['author'].split(' and')[0]:
+        # TODO not sure if best criterion
+        if p['bib']['author'].split(' and')[0] in author['name']:
             first_author_cites += p['num_citations']
     other_cites = author['citedby'] - first_author_cites
 
@@ -133,6 +124,7 @@ def plot_citations(author_data, show=False):
     })
     df_bar_long = pd.melt(df_bar, 
         id_vars=['Name'], value_name ='Number', var_name='Citation Type')
+    df_bar_long.sort_values(by='Citation Type', inplace=True)
     fig = px.bar(data_frame=df_bar_long, 
         x='Name', y='Number', color='Citation Type')
     if show:
