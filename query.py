@@ -147,8 +147,8 @@ def plot_citations(author_data, show=False):
 if __name__ == '__main__':
     # use_proxy()
     user_id = 1
-    create_user_storage(user_id, local=True)
+    # create_user_storage(user_id, local=True)
     # add_author(get_author('Sebastian Weichwald'), user_id, local=True)
-    # add_author(get_author('Christof Seiler Maastricht'), user_id, local=True)
+    add_author(get_author('Celine Hudelot'), user_id, local=True)
     author_data = load_authors(user_id, local=True)
     plot_citations(author_data, show=True)
