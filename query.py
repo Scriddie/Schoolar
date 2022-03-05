@@ -64,9 +64,11 @@ def load_authors(user_id, local=False):
     # return pd.read_csv(temp_dir(user_id, local=local))
 
 
+# TODO fix this for Similarity
 def contains_all(string, substring):
     c1, c2 = Counter(string), Counter(substring)
-    return all(c1[x] >= c2[x] for x in c2)
+    comparison = [c1[x] >= c2[x] for x in c2]
+    return (sum(comparison) / len(substring)) > 0.8
 
 
 def add_author(author, user_id, local=False):
