@@ -128,10 +128,10 @@ def plot_citations(author_data, show=False):
         'First-author citations': author_data['first_author_cites'],
     })
     df_bar_long = pd.melt(df_bar, 
-        id_vars=['Researcher'], value_name ='Number', var_name='Citation Type')
+        id_vars=['Researcher'], value_name ='Citations', var_name='Citation Type')
     df_bar_long.sort_values(by='Citation Type', inplace=True)
     fig = px.bar(data_frame=df_bar_long, 
-        x='Researcher', y='Number', color='Citation Type')
+        x='Researcher', y='Citations', color='Citation Type')
     if show:
         fig.show()
     else:
