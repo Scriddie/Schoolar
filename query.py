@@ -125,7 +125,7 @@ def plot_citations(author_data, show=False):
     df_bar = pd.DataFrame({
         'Researcher': author_data['names'],
         'Other citations': author_data['other_cites'],
-        'First author citations': author_data['first_author_cites'],
+        'First-author citations': author_data['first_author_cites'],
     })
     df_bar_long = pd.melt(df_bar, 
         id_vars=['Researcher'], value_name ='Number', var_name='Citation Type')
@@ -144,6 +144,6 @@ if __name__ == '__main__':
     user_id = 1
     create_user_storage(user_id, local=True)
     add_author(get_author('Sebastian Weichwald'), user_id, local=True)
-    add_author(get_author('Alexander Reisac'), user_id, local=True)
+    add_author(get_author('Christof Seiler Maastricht'), user_id, local=True)
     author_data = load_authors(user_id, local=True)
     plot_citations(author_data, show=True)
