@@ -16,18 +16,19 @@
         <form method="POST">
             <input type="submit" name="reset_button" value="Reset">
         </form>
-        <div id='chart' class='chart' style='width: 70%'></div>
+        <div id='bar' class='chart' style='width: 70%'></div>
+        <div id='timeline' class='chart' style='width: 70%'></div>
     </center>
 </body>
 
 <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
 <script type='text/javascript'>
     var bar = {{bar | safe}};
-    Plotly.plot('chart',bar,{});
+    Plotly.plot('bar',bar,{});
 </script>
 <script type='text/javascript'>
     var timeline = {{timeline | safe}};
-    Plotly.plot('chart',timeline,{});
+    Plotly.plot('timeline',timeline,{});
 </script>
 
 </html>
