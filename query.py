@@ -15,6 +15,7 @@ import plotly.express as px
 import pandas as pd
 import pickle as pk
 from collections import Counter
+from datetime import datetime
 
 
 def temp_dir(user_id, local=False):
@@ -134,7 +135,11 @@ def plot_citations(author_data, show=False):
     # row=2, col=1)
 
     ###
-    timeline = px.line(data_frame=df, x='Year', y='Citations', color='Researcher')
+    y = datetime.now().year
+    df_current = df.loc[df['Year']==y, :]
+    df_before = df.loc[df['Year']!=y, :]
+    timeline = px.line(data_frame=df_before, x='Year', y='Citations', color='Researcher')
+    timeline.add_trace(px.scatter(data_frame=df_current, x='Year', y='Citations', color='Researcher').data[0])
     timelineJSON = json.dumps(timeline, cls=plotly.utils.PlotlyJSONEncoder)
     ###
 
@@ -151,7 +156,7 @@ def plot_citations(author_data, show=False):
         x='Researcher', y='Citations', color='Citation Type')
 
     if show:
-        bar.show()
+        timeline.show()
     else:
         barJSON = json.dumps(bar, cls=plotly.utils.PlotlyJSONEncoder)
         return barJSON, timelineJSON
