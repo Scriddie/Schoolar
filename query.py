@@ -135,7 +135,7 @@ def plot_citations(author_data, show=False):
 
     ###
     timeline = px.line(data_frame=df, x='Year', y='Citations', color='Researcher')
-    timelineJSON = json.dumps(timelineJSON, cls=plotly.utils.PlotlyJSONEncoder)
+    timelineJSON = json.dumps(timeline, cls=plotly.utils.PlotlyJSONEncoder)
     ###
 
     df_bar = pd.DataFrame({
