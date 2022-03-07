@@ -29,6 +29,7 @@ def create_user_storage(user_id, local=False):
     author_data = {'names': [],
                    'other_cites': [],
                    'first_author_cites': [],
+                   'last_author_cites': [],
                    'df': df}
     with open(temp_dir(user_id, local=local), 'wb') as fp:
     	pk.dump(author_data, fp)
@@ -64,8 +65,8 @@ def load_authors(user_id, local=False):
     # return pd.read_csv(temp_dir(user_id, local=local))
 
 
-# TODO fix this for Similarity
 def contains_enough(string, substring):
+    # TODO Note that this may fail in some instances
     c1, c2 = Counter(string), Counter(substring)
     comparison = [c1[x] >= c2[x] for x in c2]
     return (sum(comparison) / len(c2)) > 0.8
@@ -83,19 +84,27 @@ def add_author(author, user_id, local=False):
     researcher += len(list(author['cites_per_year'].values()))*[author['name']]
     new_author = pd.DataFrame({'Year': years, 'Citations': cites, 'Researcher': researcher})    
     df = pd.concat((df, new_author), axis=0)
-
+    
     # first author cites / other cites
     first_author_cites = 0
+    last_author_cites = 0
     for p in author['publications']:
-        # TODO not sure if best criterion
-        if contains_enough(author['name'], p['bib']['author'].split(' and')[0]):
+        authors = p['bib']['author'].split(', ')
+        first_author = authors[0]
+        last_author = authors[-1]
+        if contains_enough(author['name'], first_author):
             first_author_cites += p['num_citations']
-    other_cites = author['citedby'] - first_author_cites
+        elif contains_enough(author['name'], last_author):
+            last_author_cites += p['num_citations']
+        else:
+            pass
+    other_cites = author['citedby'] - first_author_cites - last_author_cites
 
     author_data = {
         'names': author_data['names']+[author['name']],
         'other_cites': author_data['other_cites']+[other_cites],
-        'first_author_cites': author_data['first_author_cites']+[first_author_cites],
+        'first_author_cites': author_data['first_author_cites'] + [first_author_cites],
+        'last_author_cites': author_data['last_author_cites'] + [last_author_cites],
         'df': df
     }
 
@@ -130,6 +139,7 @@ def plot_citations(author_data, show=False):
         'Researcher': author_data['names'],
         'Other citations': author_data['other_cites'],
         'First-author citations': author_data['first_author_cites'],
+        'Last-author citations': author_data['last_author_cites']
     })
     df_bar_long = pd.melt(df_bar, 
         id_vars=['Researcher'], value_name ='Citations', var_name='Citation Type')
@@ -146,9 +156,9 @@ def plot_citations(author_data, show=False):
 
 if __name__ == '__main__':
     # use_proxy()
-    user_id = 1
-    # create_user_storage(user_id, local=True)
-    # add_author(get_author('Sebastian Weichwald'), user_id, local=True)
-    add_author(get_author('Celine Hudelot'), user_id, local=True)
+    user_id = 2
+    create_user_storage(user_id, local=True)
+    add_author(get_author('Sebastian Weichwald'), user_id, local=True)
+    # add_author(get_author('Alexander Reisach'), user_id, local=True)
     author_data = load_authors(user_id, local=True)
     plot_citations(author_data, show=True)
