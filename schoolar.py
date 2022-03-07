@@ -38,8 +38,10 @@ def my_post():
     else:
         pass
     author_data = query.load_authors(user_id)
-    graphJSON = query.plot_citations(author_data)
-    return render_template('simple.html', graphJSON=graphJSON)
+    bar, timeline = query.plot_citations(author_data)
+    return render_template('simple.html', 
+                           bar=bar,
+                           timeline=timeline)
 
 
 if __name__ == "__main__":

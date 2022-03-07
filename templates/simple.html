@@ -7,7 +7,7 @@
             <input name="add_researcher">
             <input type="submit" value="Add researcher">
         </form>
-        <div style="margin-top: 10px; margin-bottom: 10px">Loading is veeery slow, please be patient :)</div>
+        <div style="margin-top: 10px; margin-bottom: 10px">Loading is a bit slow, please be patient :)</div>
         <!-- TODO
         <form method="POST">
             <input type="submit" name="first_author" value="Only first-author works">
@@ -22,8 +22,10 @@
 
 <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
 <script type='text/javascript'>
-  var graphs = {{graphJSON | safe}};
-  Plotly.plot('chart',graphs,{});
+    var bar = {{bar | safe}};
+    Plotly.plot('chart',bar,{});
+    var timeline = {{timeline | safe}};
+    Plotly.plot('chart',timeline,{});
 </script>
 
 </html>

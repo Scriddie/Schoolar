@@ -134,7 +134,8 @@ def plot_citations(author_data, show=False):
     # row=2, col=1)
 
     ###
-    # fig = px.line(data_frame=df, x='Year', y='Citations', color='Researcher')
+    timeline = px.line(data_frame=df, x='Year', y='Citations', color='Researcher')
+    timelineJSON = json.dumps(timelineJSON, cls=plotly.utils.PlotlyJSONEncoder)
     ###
 
     df_bar = pd.DataFrame({
@@ -146,14 +147,14 @@ def plot_citations(author_data, show=False):
     df_bar_long = pd.melt(df_bar, 
         id_vars=['Researcher'], value_name ='Citations', var_name='Citation Type')
     df_bar_long.sort_values(by='Citation Type', inplace=True)
-    fig = px.bar(data_frame=df_bar_long, 
+    bar = px.bar(data_frame=df_bar_long, 
         x='Researcher', y='Citations', color='Citation Type')
 
     if show:
-        fig.show()
+        bar.show()
     else:
-        graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-        return graphJSON
+        barJSON = json.dumps(bar, cls=plotly.utils.PlotlyJSONEncoder)
+        return barJSON, timelineJSON
 
 
 if __name__ == '__main__':
