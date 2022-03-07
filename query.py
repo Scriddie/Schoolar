@@ -134,7 +134,6 @@ def plot_citations(author_data, show=False):
     #     x=author_data['names'], y=author_data['first_author_cites']), 
     # row=2, col=1)
 
-    ###
     y = datetime.now().year
     df_current = df.loc[df['Year']==y, :]
     df_before = df.loc[df['Year']!=y, :]
@@ -146,8 +145,8 @@ def plot_citations(author_data, show=False):
     except IndexError:
         pass
     timelineJSON = json.dumps(timeline, cls=plotly.utils.PlotlyJSONEncoder)
-    ###
 
+    # TODO use different color scheme for this graph to avoid confusion!
     df_bar = pd.DataFrame({
         'Researcher': author_data['names'],
         'Other citations': author_data['other_cites'],
@@ -158,10 +157,11 @@ def plot_citations(author_data, show=False):
         id_vars=['Researcher'], value_name ='Citations', var_name='Citation Type')
     df_bar_long.sort_values(by='Citation Type', inplace=True)
     bar = px.bar(data_frame=df_bar_long, 
-        x='Researcher', y='Citations', color='Citation Type')
+        x='Researcher', y='Citations', color='Citation Type',
+        color_discrete_sequence=px.colors.qualitative.G10)
 
     if show:
-        timeline.show()
+        bar.show()
     else:
         barJSON = json.dumps(bar, cls=plotly.utils.PlotlyJSONEncoder)
         return barJSON, timelineJSON
