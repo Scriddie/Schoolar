@@ -140,7 +140,9 @@ def plot_citations(author_data, show=False):
     df_before = df.loc[df['Year']!=y, :]
     timeline = px.line(data_frame=df_before, x='Year', y='Citations', color='Researcher')
     try:
-        timeline.add_trace(px.scatter(data_frame=df_current, x='Year', y='Citations', color='Researcher').data[0])
+        current = px.scatter(data_frame=df_current, x='Year', y='Citations', color='Researcher')
+        current.data[0]['showlegend']=False
+        timeline.add_trace(current.data[0])
     except IndexError:
         pass
     timelineJSON = json.dumps(timeline, cls=plotly.utils.PlotlyJSONEncoder)
