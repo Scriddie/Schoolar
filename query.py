@@ -68,6 +68,8 @@ def load_authors(user_id, local=False):
 def contains_enough(string, substring):
     # TODO Note that this may fail in some instances
     c1, c2 = Counter(string), Counter(substring)
+    if len(c2) == 0:  # No author information found
+        return False
     comparison = [c1[x] >= c2[x] for x in c2]
     return (sum(comparison) / len(c2)) > 0.8
 
