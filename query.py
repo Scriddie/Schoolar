@@ -134,14 +134,17 @@ def plot_citations(author_data, show=False):
     #     x=author_data['names'], y=author_data['first_author_cites']), 
     # row=2, col=1)
 
+    # TODO keep user order of added researchers!
     y = datetime.now().year
     df_current = df.loc[df['Year']==y, :]
     df_before = df.loc[df['Year']!=y, :]
     timeline = px.line(data_frame=df_before, x='Year', y='Citations', color='Researcher')
     try:
+        # TODO this doesn't seem to work for more than one!
         current = px.scatter(data_frame=df_current, x='Year', y='Citations', color='Researcher')
-        current.data[0]['showlegend']=False
-        timeline.add_trace(current.data[0])
+        for i in current.data:
+            i['showlegend']=False
+            timeline.add_trace(i)
     except IndexError:
         pass
     timelineJSON = json.dumps(timeline, cls=plotly.utils.PlotlyJSONEncoder)
@@ -161,7 +164,7 @@ def plot_citations(author_data, show=False):
         color_discrete_sequence=px.colors.qualitative.G10)
 
     if show:
-        bar.show()
+        timeline.show()
     else:
         barJSON = json.dumps(bar, cls=plotly.utils.PlotlyJSONEncoder)
         return barJSON, timelineJSON
@@ -170,8 +173,8 @@ def plot_citations(author_data, show=False):
 if __name__ == '__main__':
     # use_proxy()
     user_id = 2
-    create_user_storage(user_id, local=True)
-    add_author(get_author('Sebastian Weichwald'), user_id, local=True)
+    # create_user_storage(user_id, local=True)
+    # add_author(get_author('Sebastian Weichwald'), user_id, local=True)
     # add_author(get_author('Alexander Reisach'), user_id, local=True)
     author_data = load_authors(user_id, local=True)
     plot_citations(author_data, show=True)
