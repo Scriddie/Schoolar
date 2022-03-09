@@ -101,6 +101,7 @@ def add_author(author, user_id, local=False):
             last_author_cites += p['num_citations']
         else:
             pass
+    # TODO can result in negative numbers if there are different versions of the same publication
     other_cites = author['citedby'] - first_author_cites - last_author_cites
 
     author_data = {
@@ -175,6 +176,6 @@ if __name__ == '__main__':
     user_id = 2
     # create_user_storage(user_id, local=True)
     # add_author(get_author('Sebastian Weichwald'), user_id, local=True)
-    # add_author(get_author('Alexander Reisach'), user_id, local=True)
+    add_author(get_author('Alexander Reisach'), user_id, local=True)
     author_data = load_authors(user_id, local=True)
     plot_citations(author_data, show=True)
