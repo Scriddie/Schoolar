@@ -1,8 +1,8 @@
 from flask import Flask, request, render_template, make_response
 import numpy as np
 import sys
-sys.path.append('/var/www/FlaskApps')
-import SchoolarFlask.query as query
+sys.path.append('/var/www/FlaskApps/Schoolar*')
+import query
 
 # # view counter configuration
 # app.config['TRACK_USAGE_USE_FREEGEOIP'] = False
