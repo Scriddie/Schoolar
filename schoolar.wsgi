@@ -1,7 +1,9 @@
 #! /usr/bin/python3
 import logging
+import os
 import sys
 logging.basicConfig(stream=sys.stderr)
-sys.path.insert(0, '/var/www/FlaskApps/')
-from SchoolarFlask.schoolar import app as application
+file_path = os.path.realpath(__file__)
+sys.path.insert(0, file_path+'/..')
+from schoolar import app as application
 application.secret_key = 'anything you wish'
