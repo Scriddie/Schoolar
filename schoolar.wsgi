@@ -4,6 +4,6 @@ import os
 import sys
 logging.basicConfig(stream=sys.stderr)
 file_path = os.path.realpath(__file__)
-sys.path.insert(0, file_path+'/..')
+sys.path.insert(0, file_path)
 from schoolar import app as application
 application.secret_key = 'anything you wish'
