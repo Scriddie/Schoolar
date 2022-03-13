@@ -4,6 +4,19 @@ import sys
 sys.path.append('/var/www/FlaskApps')
 import SchoolarFlask.query as query
 
+# # view counter configuration
+# app.config['TRACK_USAGE_USE_FREEGEOIP'] = False
+# app.config['TRACK_USAGE_INCLUDE_OR_EXCLUDE_VIEWS'] = 'include'
+# from flask.ext.track_usage import TrackUsage
+# from flask_track_usage.storage.printer import PrintWriter
+# from flask_track_usage.storage.output import OutputWriter
+
+# # Make an instance of the extension and put two writers
+# t = TrackUsage(app, [
+#     PrintWriter(),
+#     OutputWriter(transform=lambda s: "OUTPUT: " + str(s))
+# ])
+
 
 app = Flask(__name__)
 
