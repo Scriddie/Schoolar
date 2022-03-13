@@ -1,7 +1,9 @@
 from flask import Flask, request, render_template, make_response
 import numpy as np
+import os
 import sys
-sys.path.append('/var/www/FlaskApps/Schoolar*')
+file_path = os.path.realpath(__file__)
+sys.path.append(file_path+'/..')
 import query
 
 # # view counter configuration

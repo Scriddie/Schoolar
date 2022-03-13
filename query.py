@@ -1,9 +1,7 @@
 import os
 import sys
-from threading import local
-
-from bibtexparser import load
-sys.path.append('/var/www/FlaskApps/SchoolarFlask/')
+file_path = os.path.realpath(__file__)
+sys.path.append(file_path+'/..')
 from scholarly.scholarly import scholarly, ProxyGenerator
 import matplotlib.pyplot as plt
 import seaborn as sns
