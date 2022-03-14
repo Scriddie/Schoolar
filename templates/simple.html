@@ -7,7 +7,7 @@
             <input name="add_researcher">
             <input type="submit" value="Add researcher">
         </form>
-        <div name="profile_suggestions">Profiles placeholder</div>
+        <div id="profiles">Profiles placeholder</div>
         <div style="margin-top: 10px; margin-bottom: 10px">Loading can be a bit slow, please be patient :)</div>
         <!-- TODO
         <form method="POST">
@@ -25,7 +25,7 @@
 <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
 <script type='text/javascript'>
     // author suggestions
-    document.getElementById("profile_suggestions").innerHTML = {{profile_names}};
+    document.getElementById("profiles").innerHTML = {{profile_names}};
     // bar plot
     var bar = {{bar | safe}};
     Plotly.plot('bar',bar,{});
