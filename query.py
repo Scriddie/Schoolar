@@ -56,7 +56,13 @@ def use_proxy():
 
 
 def get_author(name):
-    """ get author from scholarly """
+    """ get author from scholarly 
+    args:
+        name: Search string for authors
+    returns:
+        author: first profile
+        profiles: String consisting of all profiles
+    """
     search_query = scholarly.search_author(name)
     try:
         profiles = [i for i in search_query]
@@ -66,7 +72,7 @@ def get_author(name):
         author = scholarly.fill(first_profile, sections=['basics', 'citations', 'counts', 'publications'])
         return author, profile_names
     except StopIteration:
-        None
+        return None, ""
 
 
 def load_authors(user_id, local=False):
@@ -173,7 +179,7 @@ if __name__ == '__main__':
     # use_proxy()
     user_id = new_user_id()
     create_user_storage(user_id, local=True)
-    # add_author(get_author('Sebastian Weichwald'), user_id, local=True)
-    add_author(get_author('Christof Seiler'), user_id, local=True)
+    author, profiles = get_author('Christof Seiler')
+    add_author(author, user_id, local=True)
     author_data = load_authors(user_id, local=True)
     plot_citations(author_data, show=True)
