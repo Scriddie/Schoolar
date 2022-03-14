@@ -1,5 +1,4 @@
 from flask import Flask, request, render_template, make_response
-import numpy as np
 import os
 import sys
 parent_dir = os.path.dirname(os.path.realpath(__file__))
