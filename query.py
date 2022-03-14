@@ -1,3 +1,7 @@
+""" 
+Query google scholar for information on a given researcher;
+Visualize results;
+"""
 import os
 import sys
 parent_dir = os.path.dirname(os.path.realpath(__file__))
@@ -14,6 +18,12 @@ import pandas as pd
 import pickle as pk
 from collections import Counter
 from datetime import datetime
+
+
+def new_user_id(local=False):
+    path = f'temp' if local else f'{parent_dir}/temp'
+    prev_users = [0] + [int(i.split('.')[0]) for i in os.listdir(path)]
+    return max(prev_users) + 1
 
 
 def temp_dir(user_id, local=False):
@@ -49,7 +59,10 @@ def get_author(name):
     """ get author from scholarly """
     search_query = scholarly.search_author(name)
     try:
-        first_profile = next(search_query)
+        profiles = [i for i in search_query]
+        authors = [i['name']+', '+i['affiliation'] for i in all]
+        # TODO show available profiles
+        first_profile = profiles[0]
         author = scholarly.fill(first_profile, sections=['basics', 'citations', 'counts', 'publications'])
         return author
     except StopIteration:
@@ -118,28 +131,16 @@ def add_author(author, user_id, local=False):
 def plot_citations(author_data, show=False):
     """ df: contains Year, Citations, Researcher """
     df = author_data['df']
-    # fig = make_subplots(rows=2, cols=1)
-    
-    # # cites per year
-    # fig.append_trace(
-    #     go.Scatter(x=df['Year'], y=df['Citations'], fill=df['Researcher']), 
-    #     # px.line(data_frame=df, x='Year', y='Citations', color='Researcher'), 
-    # row=1, col=1)
-        # # total cites
-    # fig.append_trace(
-    #     go.Bar(x=author_data['names'], y=author_data['cites']), 
-    # row=2, col=1)
-    # fig.append_trace(go.Bar(
-    #     x=author_data['names'], y=author_data['first_author_cites']), 
-    # row=2, col=1)
 
     # TODO keep user order of added researchers!
     y = datetime.now().year
     df_current = df.loc[df['Year']==y, :]
     df_before = df.loc[df['Year']!=y, :]
-    timeline = px.line(data_frame=df_before, x='Year', y='Citations', color='Researcher')
+    if df_before.shape[0] == 1:  # no line with just one entry
+        timeline = px.scatter(data_frame=df_before, x='Year', y='Citations', color='Researcher')
+    else:
+        timeline = px.line(data_frame=df_before, x='Year', y='Citations', color='Researcher')
     try:
-        # TODO this doesn't seem to work for more than one!
         current = px.scatter(data_frame=df_current, x='Year', y='Citations', color='Researcher')
         for i in current.data:
             i['showlegend']=False
@@ -148,7 +149,6 @@ def plot_citations(author_data, show=False):
         pass
     timelineJSON = json.dumps(timeline, cls=plotly.utils.PlotlyJSONEncoder)
 
-    # TODO use different color scheme for this graph to avoid confusion!
     df_bar = pd.DataFrame({
         'Researcher': author_data['names'],
         'Other citations': author_data['other_cites'],
@@ -171,9 +171,9 @@ def plot_citations(author_data, show=False):
 
 if __name__ == '__main__':
     # use_proxy()
-    user_id = 2
-    # create_user_storage(user_id, local=True)
+    user_id = new_user_id()
+    create_user_storage(user_id, local=True)
     # add_author(get_author('Sebastian Weichwald'), user_id, local=True)
-    add_author(get_author('Alexander Reisach'), user_id, local=True)
+    add_author(get_author('Christof Seiler'), user_id, local=True)
     author_data = load_authors(user_id, local=True)
     plot_citations(author_data, show=True)

@@ -6,6 +6,7 @@ parent_dir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(parent_dir)
 import query
 
+
 # # view counter configuration
 # app.config['TRACK_USAGE_USE_FREEGEOIP'] = False
 # app.config['TRACK_USAGE_INCLUDE_OR_EXCLUDE_VIEWS'] = 'include'
@@ -25,7 +26,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def run():
-    user_id = str(np.random.randint(0, 999999))
+    user_id = query.new_user_id()
     query.create_user_storage(user_id)
     author_data = query.load_authors(user_id)
     graphJSON = query.plot_citations(author_data)
