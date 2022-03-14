@@ -1,3 +1,10 @@
+<style>
+.description {
+    margin-top: 10px; 
+    margin-bottom: 10px;
+}
+</style>
+
 <!doctype html>
 <html>
 <body>
@@ -7,8 +14,8 @@
             <input name="add_researcher">
             <input type="submit" value="Add researcher">
         </form>
-        <div id="profiles">{{profile_names}}</div>
-        <div style="margin-top: 10px; margin-bottom: 10px">Loading can be a bit slow, please be patient :)</div>
+        <div id="profiles" class="description">{{profile_names}}</div>
+        <div class="description">Loading can be a bit slow, please be patient :)</div>
         <!-- TODO
         <form method="POST">
             <input type="submit" name="first_author" value="Only first-author works">
