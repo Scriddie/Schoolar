@@ -23,7 +23,7 @@ from datetime import datetime
 def new_user_id(local=False):
     path = f'temp' if local else f'{parent_dir}/temp'
     prev_users = [0] + [int(i.split('.')[0]) for i in os.listdir(path)]
-    return max(prev_users) + 1
+    return str(max(prev_users) + 1)
 
 
 def temp_dir(user_id, local=False):
