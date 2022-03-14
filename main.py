@@ -2,7 +2,6 @@ from flask import Flask, request, render_template, make_response
 import numpy as np
 import os
 import sys
-import json
 parent_dir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(parent_dir)
 import query
@@ -58,7 +57,7 @@ def my_post():
     author_data = query.load_authors(user_id)
     bar, timeline = query.plot_citations(author_data)
     return render_template('simple.html', 
-                           profile_names=json.dumps(profile_names),
+                           profile_names=profile_names,
                            bar=bar,
                            timeline=timeline)
 

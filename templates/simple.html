@@ -7,7 +7,7 @@
             <input name="add_researcher">
             <input type="submit" value="Add researcher">
         </form>
-        <div id="profiles">Profiles placeholder</div>
+        <div id="profiles">{{profile_names}}</div>
         <div style="margin-top: 10px; margin-bottom: 10px">Loading can be a bit slow, please be patient :)</div>
         <!-- TODO
         <form method="POST">
@@ -26,8 +26,8 @@
 <script type='text/javascript'>
     // author suggestions
     // TODO this doesn't work!!
-    var profiles = {{profile_names}};
-    document.getElementById("profiles").innerHTML = 'lul';
+    // var profiles = {{profile_names}};
+    // document.getElementById("profiles").innerHTML = 'lul';
     // bar plot
     var bar = {{bar | safe}};
     Plotly.plot('bar', bar, {});
