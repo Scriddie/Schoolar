@@ -10,5 +10,5 @@ logging.basicConfig(filename=parent_dir+'/log.txt',
                     level=logging.INFO)
 sys.path.insert(0, parent_dir)
 logging.info(sys.path[0])
-from schoolar import app as application
+from main import app as application
 application.secret_key = 'anything you wish'
