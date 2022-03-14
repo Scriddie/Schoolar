@@ -3,6 +3,10 @@
     margin-top: 10px; 
     margin-bottom: 10px;
 }
+.chart {
+    height: 10%; 
+    width: 50%;
+}
 </style>
 
 <!doctype html>
@@ -12,20 +16,15 @@
         <h1>Compare Scholars by Citations!</h1>
         <form method="POST">
             <input name="add_researcher">
-            <input type="submit" value="Add researcher">
+            <input type="submit" value="Find researcher">
         </form>
         <div id="profiles" class="description">{{profile_names}}</div>
         <div class="description">Loading can be a bit slow, please be patient :)</div>
-        <!-- TODO
-        <form method="POST">
-            <input type="submit" name="first_author" value="Only first-author works">
-        </form> 
-        -->
         <form method="POST">
             <input type="submit" name="reset_button" value="Reset">
         </form>
-        <div id='bar' class='chart' style='height: 10%; width: 50%'></div>
-        <div id='timeline' class='chart' style='height: 10%; width: 50%'></div>
+        <div id='bar' class='chart'></div>
+        <div id='timeline' class='chart'></div>
     </center>
 </body>
 
