@@ -25,13 +25,14 @@
 <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
 <script type='text/javascript'>
     // author suggestions
-    document.getElementById("profiles").innerHTML = {{profile_names}};
+    var profile_names = {{profile_names | safe}};
+    document.getElementById("profiles").innerHTML = profile_names;
     // bar plot
     var bar = {{bar | safe}};
-    Plotly.plot('bar',bar,{});
+    Plotly.plot('bar', bar, {});
     // line plot
     var timeline = {{timeline | safe}};
-    Plotly.plot('timeline',timeline,{});
+    Plotly.plot('timeline', timeline, {});
 </script>
 
 </html>
