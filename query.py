@@ -60,7 +60,7 @@ def get_author(name):
     search_query = scholarly.search_author(name)
     try:
         profiles = [i for i in search_query]
-        profile_names = "-".join([i['name']+', '+i['affiliation'] for i in all])
+        profile_names = "-".join([i['name']+', '+i['affiliation'] for i in profiles])
         # TODO show available profiles
         first_profile = profiles[0]
         author = scholarly.fill(first_profile, sections=['basics', 'citations', 'counts', 'publications'])
