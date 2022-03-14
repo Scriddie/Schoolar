@@ -20,7 +20,7 @@ def temp_dir(user_id, local=False):
     if local:
         return f'temp/{user_id}.pk'
     else:
-        return f'/var/www/FlaskApps/SchoolarFlask/temp/{user_id}.pk'
+        return f'{parent_dir}/temp/{user_id}.pk'
 
 
 def create_user_storage(user_id, local=False):
