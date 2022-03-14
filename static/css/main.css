@@ -3,5 +3,7 @@
     margin-bottom: 10px;
 }
 .chart {
+    /* height does not work but needs to be there? */
+    height: 50%;
     width: 50%;
 }
