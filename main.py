@@ -38,6 +38,7 @@ def run():
 @app.route('/', methods=['POST'])
 def my_post():
     user_id = request.cookies.get('userID')
+    profile_names = ""
     if 'reset_button' in request.form:
         query.create_user_storage(user_id)
     elif 'first_author' in request.form:
@@ -45,7 +46,7 @@ def my_post():
         pass
     elif 'add_researcher' in request.form:
         text = request.form['add_researcher']
-        author = query.get_author(text)
+        author, profile_names = query.get_author(text)
         if author is None:
             # TODO author does not exist
             pass
@@ -56,6 +57,7 @@ def my_post():
     author_data = query.load_authors(user_id)
     bar, timeline = query.plot_citations(author_data)
     return render_template('simple.html', 
+                           profile_names=profile_names,
                            bar=bar,
                            timeline=timeline)
 
