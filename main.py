@@ -2,8 +2,8 @@ from flask import Flask, request, render_template, make_response
 import numpy as np
 import os
 import sys
-file_path = os.path.realpath(__file__)
-sys.path.append(file_path+'/..')
+parent_dir = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(parent_dir)
 import query
 
 # # view counter configuration

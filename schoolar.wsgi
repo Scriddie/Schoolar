@@ -2,8 +2,7 @@
 import logging
 import os
 import sys
-parent_dir = os.path.realpath(__file__)+'/..'
-print(parent_dir)
+parent_dir = os.path.dirname(os.path.realpath(__file__))
 # TODO somehow logging does not work!
 logging.basicConfig(filename=parent_dir+'/log.txt',
                     filemode='a',

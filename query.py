@@ -1,7 +1,7 @@
 import os
 import sys
-file_path = os.path.realpath(__file__)
-sys.path.append(file_path+'/..')
+parent_dir = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(parent_dir)
 from scholarly.scholarly import scholarly, ProxyGenerator
 import matplotlib.pyplot as plt
 import seaborn as sns
