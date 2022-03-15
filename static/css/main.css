@@ -1,3 +1,7 @@
+h1 {
+    font-size:48px;
+}
+
 .description {
     margin-top: 10px; 
     margin-bottom: 10px;
@@ -10,8 +14,17 @@
     width: 50%;
 }
 
+.description{
+    font-size: 16px;
+}
+
 #submit_button{
-    padding: 16px;
+    padding: 24px;
+    font-size: 24px;
+}
+
+#reset_button{
+    padding: 8px;
     font-size: 16px;
 }
 
@@ -22,8 +35,8 @@ https://stackoverflow.com/questions/60104253/how-to-show-datalist-with-javascrip
 .dropbtn {
     background-color: #9bd4fa;
     color: white;
-    padding: 16px;
-    font-size: 16px;
+    padding: 24px;
+    font-size: 24px;
     cursor: pointer;
     border-radius: 10px;
   }
