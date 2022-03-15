@@ -3,6 +3,7 @@
     margin-bottom: 10px;
     white-space: pre-wrap;
 }
+
 .chart {
     /* height does not work but needs to be there? */
     height: 50%;

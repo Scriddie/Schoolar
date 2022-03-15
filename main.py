@@ -4,6 +4,7 @@ import sys
 parent_dir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(parent_dir)
 import query
+import json
 
 
 # # view counter configuration
@@ -55,8 +56,10 @@ def my_post():
         pass
     author_data = query.load_authors(user_id)
     bar, timeline = query.plot_citations(author_data)
+    profile_list = json.dumps(list(profile_names.split('---')))
     return render_template('simple.html', 
                            profiles=profile_names,
+                           list=profile_list, # json.dumps(profile_list)
                            bar=bar,
                            timeline=timeline)
 
