@@ -3,6 +3,7 @@ Query google scholar for information on a given researcher;
 Visualize results;
 """
 import os
+import profile
 import sys
 parent_dir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(parent_dir)
@@ -62,15 +63,18 @@ def get_author(name):
         profiles: String consisting of all profiles
     """
     search_query = scholarly.search_author(name)
-    try:
-        profiles = [i for i in search_query]
-        profile_names = "---".join([i['name']+', '+i['affiliation'] for i in profiles])
-        # TODO show available profiles
+    profiles = [i for i in search_query]
+    profile_names = [i['name']+', '+i['affiliation'] for i in profiles]
+    if len(profiles) == 0:
+        return None, ""
+    elif len(profiles) > 1:
+        # not unique, return names
+        return None, profile_names
+    else:
+        # unique profile
         first_profile = profiles[0]
         author = scholarly.fill(first_profile, sections=['basics', 'citations', 'counts', 'publications'])
         return author, profile_names
-    except StopIteration:
-        return None, ""
 
 
 def load_authors(user_id, local=False):

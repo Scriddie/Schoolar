@@ -10,6 +10,11 @@
     width: 50%;
 }
 
+#submit_button{
+    padding: 16px;
+    font-size: 16px;
+}
+
 /* 
 https://stackoverflow.com/questions/60104253/how-to-show-datalist-with-javascript
 */
@@ -20,6 +25,7 @@ https://stackoverflow.com/questions/60104253/how-to-show-datalist-with-javascrip
     padding: 16px;
     font-size: 16px;
     cursor: pointer;
+    border-radius: 10px;
   }
   
 .dropbtn:hover, .dropbtn:focus {

@@ -48,7 +48,7 @@ def my_post():
         text = request.form['add_researcher']
         author, profile_names = query.get_author(text)
         if author is None:
-            # TODO author does not exist
+            # TODO author not unique or does not exist
             pass
         else:
             query.add_author(author, user_id)
@@ -56,10 +56,9 @@ def my_post():
         pass
     author_data = query.load_authors(user_id)
     bar, timeline = query.plot_citations(author_data)
-    profile_list = json.dumps(list(profile_names.split('---')))
+    profile_names = json.dumps(profile_names)
     return render_template('simple.html', 
-                           profiles=profile_names,
-                           list=profile_list, # json.dumps(profile_list)
+                           profile_names=profile_names,
                            bar=bar,
                            timeline=timeline)
 

@@ -9,11 +9,6 @@
         <div class="dropdown">
             <form method="POST" id="input_form">
                 <input name="add_researcher" id="input_researcher" class="dropbtn" autofocus>
-                <!-- Dropdown</button> -->
-                <!-- <div id="myDropdown" class="dropdown-content">
-                    <a href="#aaa">aaa</a>
-                    <a href="#bb">bb</a>
-                </div> -->
                 <input type="submit" value="Find researcher" id="submit_button">
             </form>
         </div>
@@ -49,31 +44,37 @@
         }
     }
 
-    function search_suggestion(name) {
-        document.getElementById("input_researcher").value = name;
-        document.getElementById("submit_button").click();
-    }
+    var profile_list = {{ profile_names | safe }};
+    // multiple profiles
+    if (profile_list.length > 1) {
+        // create dropdown div
+        var dropdown = document.createElement("div");
+        dropdown.id = "myDropdown";
+        dropdown.setAttribute("class", "dropdown-content");
+        // add inner links
+        for (var p in profile_list) {
+            let option = document.createElement('a');
+            option.setAttribute("class", "option");
+            // workaround for instant evaluation of 'name' parameter
+            option.innerHTML = profile_list[p];
+            (function(name){
+                option.onclick = function () {
+                    document.getElementById("input_researcher").value = name;
+                    document.getElementById("submit_button").click();
+                };
+            })(profile_list[p]);
+            dropdown.appendChild(option);
+        }
+        // append to document
+        var input_form = document.getElementById("input_form");
+        input_form.appendChild(dropdown);
+        // Show dropdown menu
+        document.getElementById("input_researcher").focus();
+        document.getElementById("input_researcher").value = '';
+        show_suggestions();
+    } else { // single profile
 
-    // create dropdown div
-    var dropdown = document.createElement("div");
-    dropdown.id = "myDropdown";
-    dropdown.setAttribute("class", "dropdown-content");
-    // add inner links
-    var profile_list = {{ list | safe }};
-    for (var p in profile_list) {
-        option = document.createElement('a');
-        option.setAttribute("class", "option");
-        option.onclick = function() {search_suggestion(profile_list[p])};
-        option.innerHTML = profile_list[p];
-        dropdown.appendChild(option);
     }
-    // append to document
-    var input_form = document.getElementById("input_form");
-    input_form.appendChild(dropdown);
-    // Show dropdown menu
-    document.getElementById("input_researcher").focus();
-    document.getElementById("input_researcher").value = '';
-    show_suggestions();
 
     // bar plot
     var bar = {{bar | safe}};
