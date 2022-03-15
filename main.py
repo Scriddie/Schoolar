@@ -56,7 +56,7 @@ def my_post():
     author_data = query.load_authors(user_id)
     bar, timeline = query.plot_citations(author_data)
     return render_template('simple.html', 
-                           profile_names=profile_names,
+                           profiles=profile_names,
                            bar=bar,
                            timeline=timeline)
 
