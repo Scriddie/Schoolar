@@ -5,6 +5,7 @@ Visualize results;
 import os
 import profile
 import sys
+from time import time
 parent_dir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(parent_dir)
 from scholarly.scholarly import scholarly, ProxyGenerator
@@ -41,7 +42,6 @@ def create_user_storage(user_id, local=False):
                    'df': df}
     with open(temp_dir(user_id, local=local), 'wb') as fp:
     	pk.dump(author_data, fp)
-    # df.to_csv(temp_dir(user_id, local=local))
 
 
 def use_proxy():
@@ -136,11 +136,16 @@ def add_author(author, user_id, local=False):
     
 
 
-def plot_citations(author_data, show=False):
-    """ df: contains Year, Citations, Researcher """
-    df = author_data['df']
-
+def plot_cite_timeline(author_data, show=False):
+    """
+    Citations per year per researcher
+    args:
+        author_data: dict containing author details
+    returns:
+        timelineJSON: JSON of timeline plot
+    """
     # TODO keep user order of added researchers!
+    df = author_data['df']
     y = datetime.now().year
     df_current = df.loc[df['Year']==y, :]
     df_before = df.loc[df['Year']!=y, :]
@@ -155,8 +160,22 @@ def plot_citations(author_data, show=False):
             timeline.add_trace(i)
     except IndexError:
         pass
-    timelineJSON = json.dumps(timeline, cls=plotly.utils.PlotlyJSONEncoder)
 
+    if show:
+        timeline.show()
+    else:
+        timelineJSON = json.dumps(timeline, cls=plotly.utils.PlotlyJSONEncoder)
+        return timelineJSON
+
+
+def plot_cite_type(author_data, show=False):
+    """
+    Stacked bar plot of researcher citations by type
+    args:
+        author_data: dict containing author details
+    returns:
+        barJSON: JSON of bar plot
+    """
     df_bar = pd.DataFrame({
         'Researcher': author_data['names'],
         'Other citations': author_data['other_cites'],
@@ -169,19 +188,31 @@ def plot_citations(author_data, show=False):
     bar = px.bar(data_frame=df_bar_long, 
         x='Researcher', y='Citations', color='Citation Type',
         color_discrete_sequence=px.colors.qualitative.G10)
-
     if show:
-        timeline.show()
+        bar.show()
     else:
         barJSON = json.dumps(bar, cls=plotly.utils.PlotlyJSONEncoder)
-        return barJSON, timelineJSON
+        return barJSON
+
+
+def plot_cite_gini(author_data, show=False):
+    """ 
+    GINI curves for all authors
+    args:
+        author_data: dict containing author details
+    returns:
+        barJSON: JSON of bar plot
+    """
+    # TODO plot concentration of citations
+    pass
+
 
 
 if __name__ == '__main__':
     # use_proxy()
     user_id = new_user_id()
     create_user_storage(user_id, local=True)
-    author, profiles = get_author('Christof Seiler')
+    author, profiles = get_author('Sebastian Weichwald')
     add_author(author, user_id, local=True)
     author_data = load_authors(user_id, local=True)
-    plot_citations(author_data, show=True)
+    plot_cite_type(author_data, show=True)

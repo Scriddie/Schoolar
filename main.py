@@ -29,8 +29,11 @@ def run():
     user_id = query.new_user_id()
     query.create_user_storage(user_id)
     author_data = query.load_authors(user_id)
-    graphJSON = query.plot_citations(author_data)
-    resp = make_response(render_template('simple.html', graphJSON=graphJSON))
+    timeline = query.plot_cite_timeline(author_data)
+    bar = query.plot_cite_type(author_data)
+    resp = make_response(render_template('simple.html', 
+                                         bar=bar,
+                                         timeline=timeline))
     resp.set_cookie('userID', user_id)
     return resp
 
@@ -55,7 +58,8 @@ def my_post():
     else:
         pass
     author_data = query.load_authors(user_id)
-    bar, timeline = query.plot_citations(author_data)
+    bar = query.plot_cite_type(author_data)
+    timeline = query.plot_cite_timeline(author_data)
     profile_names = json.dumps(profile_names)
     return render_template('simple.html', 
                            profile_names=profile_names,
