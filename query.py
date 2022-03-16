@@ -4,8 +4,8 @@ Visualize results;
 """
 import os
 import sys
-parent_dir = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(parent_dir)
+PARENT_DIR = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(PARENT_DIR)
 from scholarly.scholarly import scholarly, ProxyGenerator
 import json
 import plotly
@@ -19,16 +19,18 @@ from datetime import datetime
 
 
 def new_user_id(local=False):
-    path = f'temp' if local else f'{parent_dir}/temp'
-    prev_users = [0] + [int(i.split('.')[0]) for i in os.listdir(path)]
+    temp_folder = 'temp' if local else f'{PARENT_DIR}/temp'
+    if not os.path.exists(temp_folder):
+        os.mkdir(temp_folder)
+    prev_users = [0] + [int(i.split('.')[0]) for i in os.listdir(temp_folder)]
     return str(max(prev_users) + 1)
 
 
 def temp_dir(user_id, local=False):
-    if local:
-        return f'temp/{user_id}.pk'
-    else:
-        return f'{parent_dir}/temp/{user_id}.pk'
+    temp_folder = 'temp' if local else f'{PARENT_DIR}/temp'
+    if not os.path.exists(temp_folder):
+        os.mkdir(temp_folder)
+    return f'{temp_folder}/{user_id}.pk'
 
 
 def create_user_storage(user_id, local=False):
