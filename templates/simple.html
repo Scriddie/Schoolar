@@ -1,6 +1,17 @@
 <!doctype html>
 <html>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+<head>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BH4ZLCXWHS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-BH4ZLCXWHS');
+    </script>
+</head>
 <title>Compare Scholars</title>
 <body>
     <center>
@@ -22,67 +33,66 @@
         <div id='timeline' class='chart'></div>
     </center>
 </body>
+    <!-- Plotly and custom JS -->
+    <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+    <script type='text/javascript'>
 
-<script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
-<script type='text/javascript'>
+        // Toggle show/hide
+        function show_suggestions() {
+            document.getElementById("myDropdown").classList.toggle("show");
+        }
 
-    function show_suggestions() {
-        /* Toggle show/hide */
-        document.getElementById("myDropdown").classList.toggle("show");
-    }
-
-    window.onclick = function(event) {
         // Close the dropdown if the user clicks outside of it
-        if (!event.target.matches('.dropbtn')) {
-            var dropdowns = document.getElementsByClassName("dropdown-content");
-            var i;
-            for (i = 0; i < dropdowns.length; i++) {
-                var openDropdown = dropdowns[i];
-                if (openDropdown.classList.contains('show')) {
-                    openDropdown.classList.remove('show');
+        window.onclick = function(event) {
+            if (!event.target.matches('.dropbtn')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                var i;
+                for (i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
                 }
             }
         }
-    }
 
-    var profile_list = {{ profile_names | safe }};
-    // multiple profiles
-    if (profile_list.length > 1) {
-        // create dropdown div
-        var dropdown = document.createElement("div");
-        dropdown.id = "myDropdown";
-        dropdown.setAttribute("class", "dropdown-content");
-        // add inner links
-        for (var p in profile_list) {
-            let option = document.createElement('a');
-            option.setAttribute("class", "option");
-            // workaround for instant evaluation of 'name' parameter
-            option.innerHTML = profile_list[p];
-            (function(name){
-                option.onclick = function () {
-                    document.getElementById("input_researcher").value = name;
-                    document.getElementById("submit_button").click();
-                };
-            })(profile_list[p]);
-            dropdown.appendChild(option);
+        var profile_list = {{ profile_names | safe }};
+        // multiple profiles
+        if (profile_list.length > 1) {
+            // create dropdown div
+            var dropdown = document.createElement("div");
+            dropdown.id = "myDropdown";
+            dropdown.setAttribute("class", "dropdown-content");
+            // add inner links
+            for (var p in profile_list) {
+                let option = document.createElement('a');
+                option.setAttribute("class", "option");
+                // workaround for instant evaluation of 'name' parameter
+                option.innerHTML = profile_list[p];
+                (function(name){
+                    option.onclick = function () {
+                        document.getElementById("input_researcher").value = name;
+                        document.getElementById("submit_button").click();
+                    };
+                })(profile_list[p]);
+                dropdown.appendChild(option);
+            }
+            // append to document
+            var input_form = document.getElementById("input_form");
+            input_form.appendChild(dropdown);
+            // Show dropdown menu
+            document.getElementById("input_researcher").focus();
+            document.getElementById("input_researcher").value = '';
+            show_suggestions();
+        } else { // single profile
+
         }
-        // append to document
-        var input_form = document.getElementById("input_form");
-        input_form.appendChild(dropdown);
-        // Show dropdown menu
-        document.getElementById("input_researcher").focus();
-        document.getElementById("input_researcher").value = '';
-        show_suggestions();
-    } else { // single profile
 
-    }
-
-    // bar plot
-    var bar = {{bar | safe}};
-    Plotly.plot('bar', bar, {});
-    // line plot
-    var timeline = {{timeline | safe}};
-    Plotly.plot('timeline', timeline, {});
-</script>
-
+        // bar plot
+        var bar = {{bar | safe}};
+        Plotly.plot('bar', bar, {});
+        // line plot
+        var timeline = {{timeline | safe}};
+        Plotly.plot('timeline', timeline, {});
+    </script>
 </html>
