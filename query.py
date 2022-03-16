@@ -3,9 +3,7 @@ Query google scholar for information on a given researcher;
 Visualize results;
 """
 import os
-import profile
 import sys
-from time import time
 parent_dir = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(parent_dir)
 from scholarly.scholarly import scholarly, ProxyGenerator
