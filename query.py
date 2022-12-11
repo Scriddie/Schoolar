@@ -3,9 +3,11 @@ Query google scholar for information on a given researcher;
 Visualize results;
 """
 import os
+from re import X
 import sys
 PARENT_DIR = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(PARENT_DIR)
+import numpy as np
 from scholarly.scholarly import scholarly, ProxyGenerator
 import json
 import plotly
@@ -197,14 +199,24 @@ def plot_cite_type(author_data, show=False):
 
 def plot_cite_gini(author_data, show=False):
     """ 
-    GINI curves for all authors
+    GINI for all authors
     args:
         author_data: dict containing author details
     returns:
         barJSON: JSON of bar plot
     """
-    # TODO plot concentration of citations
-    pass
+    # TODO: finish!
+    citations = np.random.randint(1, 10, 10)
+    citations = np.sort(citations)
+    cite_fracs = citations / sum(citations)
+    cite_cum = np.cumsum(cite_fracs)
+    df = pd.DataFrame({
+        'Papers': np.linspace(0, 1, len(cite_fracs)),
+        'Cumulative percentage of citations': cite_cum,
+    })
+    gini = px.line(data_frame=df, x='Papers', y='Cumulative percentage of citations')
+    if show:
+        gini.show()
 
 
 
@@ -215,4 +227,5 @@ if __name__ == '__main__':
     author, profiles = get_author('Sebastian Weichwald')
     add_author(author, user_id, local=True)
     author_data = load_authors(user_id, local=True)
-    plot_cite_type(author_data, show=True)
+    # plot_cite_type(author_data, show=True)
+    plot_cite_gini(author_data, show=True)

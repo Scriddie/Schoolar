@@ -22,16 +22,22 @@ import json
 
 
 app = Flask(__name__)
+TEST = False
 
 
 @app.route("/")
 def run():
+    profile_names = ""
     user_id = query.new_user_id()
     query.create_user_storage(user_id)
+    if TEST:
+        author, profile_names = query.get_author('Sebastian Weichwald')
+        query.add_author(author, user_id)
     author_data = query.load_authors(user_id)
     timeline = query.plot_cite_timeline(author_data)
     bar = query.plot_cite_type(author_data)
-    resp = make_response(render_template('simple.html', 
+    resp = make_response(render_template('simple.html',
+                                         profile_names=profile_names,
                                          bar=bar,
                                          timeline=timeline))
     resp.set_cookie('userID', user_id)
@@ -68,4 +74,5 @@ def my_post():
 
 
 if __name__ == "__main__":
+    TEST = True
     app.run()
